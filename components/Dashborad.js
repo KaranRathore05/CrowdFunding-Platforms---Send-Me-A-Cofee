@@ -2,13 +2,14 @@
 import React, { useEffect, useState } from 'react'
 import { useSession } from "next-auth/react"
 import { useRouter } from 'next/navigation'
-import { fetchuser, updateProfile } from '@/actions/useractions'
+import { fetchuser } from '@/actions/useractions';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Bounce } from 'react-toastify';
+import { updateProfile } from '@/actions/useractions';
 
 const Dashboard = () => {
-  const { data: session } = useSession()
+  const { data: session ,update } = useSession()
   const router = useRouter()
 
   const [form, setForm] = useState({
@@ -47,7 +48,7 @@ const Dashboard = () => {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    
     if (!session?.user?.name) return
 
     await updateProfile(form, session.user.name)
@@ -68,7 +69,7 @@ const Dashboard = () => {
           Welcome to your Dashboard
         </h1>
 
-        <form className="max-w-2xl mx-auto" onSubmit={handleSubmit}>
+        <form className="max-w-2xl mx-auto" action={handleSubmit}>
           {/* Name */}
           <div className='my-2'>
             <label htmlFor="name" className="block mb-2 text-sm font-medium">Name</label>

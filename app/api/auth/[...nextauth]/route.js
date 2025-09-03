@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
 import User from "@/models/user";
 import mongoose from "mongoose";
-import payment from "@/models/payment";
+
 const MONGODB_URI = process.env.MONGODB_URI;
 
 async function connectDb() {
@@ -23,23 +23,29 @@ export const authOptions = {
       if (account.provider === "github") {
         await connectDb();
         const existingUser = await User.findOne({ email: user.email });
-        if (!existingUser) await User.create({
-          email: user.email,
-          username: user.email.split("@")[0],
-        });
+        if (!existingUser) {
+          await User.create({
+            email: user.email,
+            username: user.email.split("@")[0],
+          });
+        }
       }
       return true;
     },
     async session({ session }) {
       await connectDb();
       const dbUser = await User.findOne({ email: session.user.email });
-      if (dbUser) session.user.name = dbUser.username;
+      if (dbUser) {
+        session.user.name = dbUser.username;
+      }
       return session;
     },
-    async redirect({ baseUrl }) {
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith(baseUrl)) return url;
       return `${baseUrl}/dashboard`;
     },
   },
+  secret: process.env.NEXTAUTH_SECRET, // ✅ make sure this is set
 };
 
 const handler = NextAuth(authOptions);

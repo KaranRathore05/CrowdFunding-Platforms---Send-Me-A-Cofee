@@ -9,6 +9,7 @@ const Login = () => {
 
 
   useEffect(() => {
+    document.title = "Login - Get them a Chai"
     if (session) {
       router.push('/dashboard')
     }
