@@ -16,7 +16,7 @@ export const authOptions = {
     GitHubProvider({
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
-    })
+    }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
   session: {
@@ -45,11 +45,12 @@ export const authOptions = {
       return session;
     },
     async redirect({ url, baseUrl }) {
+      console.log('Redirect URL:', url);
+      console.log('Base URL:', baseUrl);
       if (url.startsWith(baseUrl)) return url;
       return `${baseUrl}/dashboard`;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET, // ✅ make sure this is set
 };
 
 const handler = NextAuth(authOptions);
