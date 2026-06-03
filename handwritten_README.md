@@ -35,6 +35,7 @@ A creator-focused crowdfunding platform where supporters can contribute to creat
 ### Payments
 
 * Razorpay
+* # use significant help of ai like chatgpt
 
 ## Project Structure
 
